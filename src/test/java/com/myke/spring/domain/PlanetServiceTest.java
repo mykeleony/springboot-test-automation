@@ -16,6 +16,7 @@ import static com.myke.spring.common.PlanetConstants.PLANET;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -61,6 +62,27 @@ public class PlanetServiceTest {
         when(planetRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         Optional<Planet> sut = planetService.get(1L);
+
+        assertThat(sut).isEmpty();
+    }
+
+    @Test
+    public void getPlanet_ByExistingName_ReturnsPlanet() {
+        when(planetRepository.findByName(PLANET.getName())).thenReturn(Optional.of(PLANET));
+
+        Optional<Planet> sut = planetService.getByName(PLANET.getName());
+
+        assertThat(sut).isNotEmpty();
+        assertThat(sut.get()).isEqualTo(PLANET);
+    }
+
+    @Test
+    public void getPlanet_ByInexistingName_ReturnsEmpty() {
+        final String inexistingName = "acbabcbcaacb";
+
+        when(planetRepository.findByName(inexistingName)).thenReturn(Optional.empty());
+
+        Optional<Planet> sut = planetService.getByName(inexistingName);
 
         assertThat(sut).isEmpty();
     }
