@@ -41,6 +41,9 @@ public class PlanetController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Planet create(@RequestBody Planet planet) {
+        if (planetRepository.existsByName(planet.getName()))
+            throw new RuntimeException();
+
         return planetService.create(planet);
     }
 

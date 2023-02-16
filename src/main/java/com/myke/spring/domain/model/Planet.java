@@ -1,24 +1,33 @@
 package com.myke.spring.domain.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
 @Getter
 @Setter
 @Entity(name = "planets")
-@NoArgsConstructor
 public class Planet {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotEmpty
+    @Column(unique = true)
     private String name;
 
+    @NotEmpty
     private String climate;
+
+    @NotEmpty
     private String terrain;
+
+    public Planet() {
+    }
 
     public Planet(String name, String climate, String terrain) {
         this.name = name;
