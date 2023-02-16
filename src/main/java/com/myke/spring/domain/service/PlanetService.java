@@ -1,8 +1,10 @@
 package com.myke.spring.domain.service;
 
+import com.myke.spring.domain.common.QueryBuilder;
 import com.myke.spring.domain.model.Planet;
 import com.myke.spring.domain.repository.PlanetRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +33,13 @@ public class PlanetService {
         return planetRepository.findAll();
     }
 
-    public void deleteById(Long id) {
+    @Transactional
+    public void remove(Long id) {
         planetRepository.deleteById(id);
+    }
+
+    public List<Planet> list(String climate, String terrain) {
+        Example<Planet> query = QueryBuilder.createQuery(new Planet(climate, terrain));
+        return planetRepository.findAll(query);
     }
 }
