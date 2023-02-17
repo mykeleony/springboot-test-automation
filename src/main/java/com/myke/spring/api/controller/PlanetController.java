@@ -3,6 +3,7 @@ package com.myke.spring.api.controller;
 import com.myke.spring.domain.model.Planet;
 import com.myke.spring.domain.repository.PlanetRepository;
 import com.myke.spring.domain.service.PlanetService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +41,7 @@ public class PlanetController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Planet create(@RequestBody Planet planet) {
+    public Planet create(@RequestBody @Valid Planet planet) {
         if (planetRepository.existsByName(planet.getName()))
             throw new RuntimeException();
 

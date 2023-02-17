@@ -13,8 +13,8 @@ import java.util.Optional;
 public interface PlanetRepository extends JpaRepository<Planet, Long>, QueryByExampleExecutor<Planet> {
     Optional<Planet> findByName(String name);
 
-    boolean existsByName(String name);
-
     @Override
     <S extends Planet> List<S> findAll(Example<S> Example);
+
+    boolean existsByName(String name);
 }

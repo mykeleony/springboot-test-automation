@@ -33,7 +33,6 @@ public class PlanetService {
         return planetRepository.findAll();
     }
 
-    @Transactional
     public void remove(Long id) {
         planetRepository.deleteById(id);
     }

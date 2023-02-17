@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import java.util.Objects;
 
@@ -17,13 +18,15 @@ public class Planet {
     private Long id;
 
     @NotEmpty
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @NotEmpty
+    @Column(nullable = false)
     private String climate;
 
     @NotEmpty
+    @Column(nullable = false)
     private String terrain;
 
     public Planet() {
@@ -41,10 +44,8 @@ public class Planet {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Planet planet)) return false;
-        return getId().equals(planet.getId());
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(obj, this);
     }
 
     @Override

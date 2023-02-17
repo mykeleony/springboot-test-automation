@@ -1,4 +1,4 @@
-package com.myke.spring.domain;
+package com.myke.spring.domain.service;
 
 import com.myke.spring.domain.common.QueryBuilder;
 import com.myke.spring.domain.model.Planet;

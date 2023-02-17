@@ -1,4 +1,4 @@
-package com.myke.spring.domain;
+package com.myke.spring.domain.repository;
 
 import com.myke.spring.domain.model.Planet;
 import com.myke.spring.domain.repository.PlanetRepository;
