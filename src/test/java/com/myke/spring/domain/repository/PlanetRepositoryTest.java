@@ -2,14 +2,19 @@ package com.myke.spring.domain.repository;
 
 import com.myke.spring.domain.model.Planet;
 import com.myke.spring.domain.repository.PlanetRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+import java.util.Optional;
+
 import static com.myke.spring.common.PlanetConstants.PLANET;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.*;
 
 @DataJpaTest
 public class PlanetRepositoryTest {
@@ -19,6 +24,11 @@ public class PlanetRepositoryTest {
 
     @Autowired
     private TestEntityManager testEntityManager;
+
+    @AfterEach
+    public void resetPlanetId() {
+        PLANET.setId(null);
+    }
 
     @Test
     public void createPlanet_withValidData_ReturnsPlanet() {
@@ -48,6 +58,23 @@ public class PlanetRepositoryTest {
         planet.setId(null);
 
         assertThatThrownBy(() -> planetRepository.save(planet)).isInstanceOf(RuntimeException.class);
+    }
+
+    @Test
+    public void getPlanet_withExistingId_ReturnsPlanet() {
+        Planet planet = testEntityManager.persistFlushFind(PLANET);
+
+        Optional<Planet> optionalPlanet = planetRepository.findById(planet.getId());
+
+        assertThat(optionalPlanet).isNotEmpty();
+        assertThat(optionalPlanet.get()).isEqualTo(planet);
+    }
+
+    @Test
+    public void getPlanet_withUnexistingId_ReturnsEmpty() {
+        Optional<Planet> optionalPlanet = planetRepository.findById(1L);
+
+        assertThat(optionalPlanet).isEmpty();
     }
 
 }
