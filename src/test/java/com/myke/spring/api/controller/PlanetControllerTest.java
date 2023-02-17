@@ -45,5 +45,32 @@ public class PlanetControllerTest {
                 .andExpect(jsonPath("$").value(PLANET));
     }
 
+    @Test
+    public void createPlanet_withInvalidData_ReturnsBadRequest() throws Exception {
+        Planet emptyPlanet = new Planet();
+        Planet invalidPlanet = new Planet("", "", "");
+
+        mockMvc.perform(
+                    post("/planets").content(objectMapper.writeValueAsString(emptyPlanet))
+                            .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnprocessableEntity());
+
+        mockMvc.perform(
+                post("/planets").content(objectMapper.writeValueAsString(invalidPlanet))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    public void createPlanet_WithExistingName_ReturnsConflict() throws Exception {
+        when(planetService.create(any())).thenThrow(DataIntegrityViolationException.class);
+
+        mockMvc.perform(
+                post("/planets").content(objectMapper.writeValueAsString(PLANET))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isConflict());
+    }
+
+
 
 }
