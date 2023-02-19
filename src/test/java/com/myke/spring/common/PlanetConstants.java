@@ -1,7 +1,6 @@
 package com.myke.spring.common;
 
 import com.myke.spring.domain.model.Planet;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
