@@ -1,10 +1,8 @@
 package com.myke.spring.domain.repository;
 
 import com.myke.spring.domain.model.Planet;
-import com.myke.spring.domain.repository.PlanetRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -14,7 +12,6 @@ import java.util.Optional;
 import static com.myke.spring.common.PlanetConstants.PLANET;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
 
 @DataJpaTest
 public class PlanetRepositoryTest {
@@ -77,4 +74,20 @@ public class PlanetRepositoryTest {
         assertThat(optionalPlanet).isEmpty();
     }
 
+    @Test
+    public void getPlanet_WithExistingName_ReturnsPlanet() {
+        Planet planet = testEntityManager.persistFlushFind(PLANET);
+
+        Optional<Planet> planetOptional = planetRepository.findByName(planet.getName());
+
+        assertThat(planetOptional).isNotEmpty();
+        assertThat(planetOptional.get()).isEqualTo(planet);
+    }
+
+    @Test
+    public void getPlanet_WithUnexistingName_ReturnsEmpty() {
+        Optional<Planet> planetOptional = planetRepository.findByName("name");
+
+        assertThat(planetOptional).isEmpty();
+    }
 }
