@@ -56,7 +56,12 @@ public class Planet {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getId());
+    public String toString() {
+        return "Planet{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", climate='" + climate + '\'' +
+                ", terrain='" + terrain + '\'' +
+                '}';
     }
 }
