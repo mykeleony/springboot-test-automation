@@ -40,4 +40,11 @@ public class PlanetIT {
         assertThat(planetResponse.getClimate()).isEqualTo(PLANET.getClimate());
     }
 
+    @Test
+    public void getPlanet_ReturnsPlanet() {
+        ResponseEntity<Planet> sut = restTemplate.getForEntity("/planets/1", Planet.class);
+
+        assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(sut.getBody()).isEqualTo(TATOOINE);
+    }
 }
