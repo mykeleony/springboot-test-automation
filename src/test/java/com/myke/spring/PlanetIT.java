@@ -34,6 +34,7 @@ public class PlanetIT {
 
         assertThat(sut.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
+        assertThat(planetResponse).isNotNull();
         assertThat(planetResponse.getId()).isNotNull();
         assertThat(planetResponse.getName()).isEqualTo(PLANET.getName());
         assertThat(planetResponse.getTerrain()).isEqualTo(PLANET.getTerrain());
