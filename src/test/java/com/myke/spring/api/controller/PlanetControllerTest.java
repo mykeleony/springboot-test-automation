@@ -11,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
@@ -138,7 +139,7 @@ public class PlanetControllerTest {
     }
 
     @Test
-    public void deletePlanet_WithExistentId_ReturnNoContent() throws Exception {
+    public void deletePlanet_WithExistentId_ReturnsNoContent() throws Exception {
         mockMvc.perform(delete("/planets/1"))
                 .andExpect(status().isNoContent());
     }
