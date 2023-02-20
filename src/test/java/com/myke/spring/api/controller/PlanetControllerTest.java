@@ -4,26 +4,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myke.spring.domain.model.Planet;
 import com.myke.spring.domain.repository.PlanetRepository;
 import com.myke.spring.domain.service.PlanetService;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.StatusResultMatchers;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static com.myke.spring.common.PlanetConstants.*;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -135,5 +135,21 @@ public class PlanetControllerTest {
         mockMvc.perform(get("/planets"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
+    }
+
+    @Test
+    public void deletePlanet_WithExistentId_ReturnNoContent() throws Exception {
+        mockMvc.perform(delete("/planets/1"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void deletePlanet_WithUnexistingId_ReturnsNotFound() throws Exception {
+        final Long planetId = 1L;
+
+        doThrow(new EmptyResultDataAccessException(1)).when(planetService).remove(planetId);
+
+        mockMvc.perform(delete("/planets/" + planetId))
+                .andExpect(status().isNotFound());
     }
 }
