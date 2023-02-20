@@ -49,10 +49,7 @@ public class PlanetController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Planet> remove(@PathVariable Long id) {
-        if(!planetRepository.existsById(id))
-            return ResponseEntity.notFound().build();
-
+    public ResponseEntity<Void> remove(@PathVariable Long id) {
         planetService.remove(id);
 
         return ResponseEntity.noContent().build();
